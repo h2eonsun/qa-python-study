@@ -1,17 +1,3 @@
-name = "박현선"
-target_job = "QA"
-study_language = "Python"
-experience_year = 1
-
-#print(name)
-#print(type(name), end="\n\n")
-#print(target_job)
-#print(type(target_job), end="\n\n")
-#print(study_language)
-#print(type(study_language), end="\n\n")
-#print(experience_year)
-#print(type(experience_year), end="\n\n")
-
 test_id = "TC001"
 expected = "PASS"
 actual = "FAIL"
@@ -57,7 +43,33 @@ else:
 # 다른 사람이 읽었을 때 테스트 의도가 보이는 코드 !
 
 
-test_cases = ["TC001", "TC002", "TC003"]
+#test_cases = ["TC001", "TC002", "TC003"]
+
+#for test_case in test_cases:
+#    print(f"Running: {test_case}")
+
+
+test_cases = [
+    {
+        "test_id": "TC001",
+        "expected": "PASS",
+        "actual": "PASS"
+    },
+    {
+        "test_id": "TC002",
+        "expected": "PASS",
+        "actual": "FAIL"
+    },
+    {
+        "test_id": "TC003",
+        "expected": "FAIL",
+        "actual": "FAIL"
+    }
+]
 
 for test_case in test_cases:
-    print(f"Running: {test_case}")
+    result = test_case["expected"] == test_case["actual"]
+    if result:
+        print(f"{test_case['test_id']}: PASS")
+    else:
+        print(f"{test_case['test_id']}: FAIL")
