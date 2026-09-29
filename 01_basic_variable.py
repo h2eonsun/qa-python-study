@@ -24,4 +24,40 @@ result = expected == actual
 print(f"Test ID: {test_id}")
 print(f"Expected: {expected}")
 print(f"Actual: {actual}")
-print(f"Test Result: {result}")
+#print(f"Test Result: {result}")
+if result:
+    print("Test Result: PASS")
+else:
+    print("Test Result: FAIL")
+
+response_time = 850
+
+if response_time <= 1000:
+    print("Test Result: PASS")
+elif response_time <= 2000:
+    print("Test Result: SLOW")
+else:
+    print("Test Result: FAIL")
+
+status_code = 200
+
+#if status_code == 200 and response_time <= 1000:
+    #print("PASS")
+#else:
+    #print("FAIL")
+
+if status_code == 200:
+    if response_time <= 1000:
+        print("PASS")
+    else:
+        print("FAIL - Slow Response")
+else:
+    print("FAIL - Status Code")
+
+# 다른 사람이 읽었을 때 테스트 의도가 보이는 코드 !
+
+
+test_cases = ["TC001", "TC002", "TC003"]
+
+for test_case in test_cases:
+    print(f"Running: {test_case}")
