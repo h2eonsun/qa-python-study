@@ -1,0 +1,37 @@
+[
+    {
+        "test_id": "TC001",
+        "title": "Login Success",
+        "priority": "High",
+        "expected": "PASS",
+        "actual": "PASS"
+    },
+    {
+        "test_id": "TC002",
+        "title": "Login Failure",
+        "priority": "High",
+        "expected": "FAIL",
+        "actual": "PASS"
+    },
+    {
+        "test_id": "TC003",
+        "title": "Logout",
+        "priority": "Medium",
+        "expected": "PASS",
+        "actual": "FAIL"
+    },
+    {
+        "test_id": "TC004",
+        "title": "Search",
+        "priority": "Medium",
+        "expected": "FAIL",
+        "actual": "FAIL"
+    },    
+    {
+        "test_id": "TC005",
+        "title": "Profile Update",
+        "priority": "Low",
+        "expected": "PASS",
+        "actual": "PASS"
+    }
+]
