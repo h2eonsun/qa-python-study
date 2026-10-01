@@ -27,5 +27,10 @@ for test_case in test_cases:
         else:
             print(f"{test_case['test_id']} | FAIL")
 
-    except KeyError:
-        print(f"{test_case['test_id']} | TEST DATA ERROR")
+    except KeyError as e:
+        missing_key = e.args[0]
+
+        if missing_key == "test_id":
+            print(f"Missing 'test_id' in test case: {test_case}")
+        else:
+            print(f"{test_case['test_id']} | TEST DATA ERROR")
