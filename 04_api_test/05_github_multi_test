@@ -1,0 +1,27 @@
+import requests
+
+def test_repository(repository):
+    url = f"https://api.github.com/repos/{repository}"
+
+    response = requests.get(url, timeout=5)
+    data= response.json()
+
+    assert response.status_code == 200
+    assert isinstance(data, dict)
+    
+    return data
+
+
+repositories = [
+    "octocat/Hello-World",
+    "octocat/Spoon-Knife"
+]
+
+for repository in repositories:
+    data = test_repository(repository)
+    
+    print(
+        f"{repository} | "
+        f"Name: {data['name']} | "
+        f"Result: PASS"
+    )
