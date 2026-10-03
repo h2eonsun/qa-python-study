@@ -1,0 +1,25 @@
+[
+    {
+        "test_id": "TC001",
+        "repository": "octocat/Hello-World",
+        "expected_status": 200,
+        "expected_name": "Hello-World"
+    },
+    {
+        "test_id": "TC002",
+        "repository": "octocat/Spoon-Knife",
+        "expected_status": 200,
+        "expected_name": "Spoon-Knife"
+    },
+    {
+        "test_id": "TC003",
+        "repository": "octocat/ThisRepositoryDoesNotExist",
+        "expected_status": 404
+    },
+    {
+        "test_id": "TC004",
+        "repository": "octocat/Hello-World",
+        "expected_status": 200,
+        "expected_name": "Hello-World"
+    }
+]
