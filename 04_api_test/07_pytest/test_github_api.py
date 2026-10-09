@@ -1,3 +1,5 @@
+# 실제 GitHub API 검증
+
 def test_github_status_code(github_session):
     url = "https://api.github.com/repos/octocat/Hello-World"
 
