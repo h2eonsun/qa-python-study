@@ -1,8 +1,11 @@
+# JSON + parameterize
+
 import pytest
 import requests
 import json
 from pathlib import Path
 
+pytestmark = pytest.mark.integration
 
 DATA_FILE = Path(__file__).parent / "data" / "github_repository_cases.json"
 

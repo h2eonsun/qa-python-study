@@ -1,5 +1,9 @@
 # 실제 GitHub API 검증
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_github_status_code(github_session):
     url = "https://api.github.com/repos/octocat/Hello-World"
 

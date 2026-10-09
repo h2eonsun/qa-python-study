@@ -1,5 +1,8 @@
+# parameterize
+
 import pytest
 
+pytestmark = pytest.mark.integration
 
 @pytest.mark.parametrize(
     "repository, expected_status",
