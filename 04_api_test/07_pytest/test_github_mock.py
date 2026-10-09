@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock
-
 from github_api import get_repository
-
+from settings import API_TIMEOUT_SECONDS, GITHUB_API_BASE_URL
 
 def test_get_repository_status_200():
     mock_session = MagicMock()
@@ -73,8 +72,8 @@ def test_get_repository_request():
     )
 
     mock_session.get.assert_called_once_with(
-        "https://api.github.com/repos/octocat/Hello-World",
-        timeout=5
+    f"{GITHUB_API_BASE_URL}/repos/octocat/Hello-World",
+    timeout=API_TIMEOUT_SECONDS
     )
 
 

@@ -1,6 +1,7 @@
 # parameterize
 
 import pytest
+from github_api import get_repository
 
 pytestmark = pytest.mark.integration
 
@@ -29,8 +30,6 @@ def test_repository_status(
     repository,
     expected_status
 ):
-    url = f"https://api.github.com/repos/{repository}"
-
-    response = github_session.get(url, timeout=5)
+    response = get_repository(github_session, repository)
 
     assert response.status_code == expected_status

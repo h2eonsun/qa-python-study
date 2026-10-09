@@ -4,6 +4,7 @@ import pytest
 import requests
 import json
 from pathlib import Path
+from github_api import get_repository
 
 pytestmark = pytest.mark.integration
 
@@ -24,9 +25,10 @@ test_cases = load_test_cases()
     ids=[test_case["test_id"] for test_case in test_cases]
 )
 def test_repository_status(github_session, test_case):
-    url = f"https://api.github.com/repos/{test_case['repository']}"
-
-    response = github_session.get(url, timeout=5)
+    response = get_repository(
+    github_session,
+    test_case["repository"]
+    )
 
     assert response.status_code == test_case["expected_status"]
 
