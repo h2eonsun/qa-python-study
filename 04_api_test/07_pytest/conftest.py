@@ -14,6 +14,7 @@ def github_session():
 
     session.close()
 
+# pytest.ini에 정의된 옵션을 처리하는 hook 함수
 def pytest_addoption(parser):
     parser.addoption(
         "--run-integration",
@@ -22,13 +23,14 @@ def pytest_addoption(parser):
         help="Run tests that access live external APIs",
     )
 
-
+# 테스트 수집 후 실행 전 목록을 조정하는 hook 함수
 def pytest_collection_modifyitems(config, items):
     if config.getoption("--run-integration"):
         return
 
+    # integration 마커가 있는 테스트를 건너뛰도록 설정
     skip_integration = pytest.mark.skip(
-        reason="Use --run-integration to run live API tests"
+        reason="Integration test skipped. Use --run-integration to run."
     )
 
     for item in items:
