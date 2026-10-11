@@ -74,3 +74,27 @@ def test_get_repository_safely_handles_connection_error():
     assert result["success"] is False
     assert result["response"] is None
     assert result["error"] == "connection_error"
+
+
+    # [pytest 기능] 하나의 테스트를 여러 상태 코드로 실행
+@pytest.mark.parametrize("status_code", [404, 500])
+def test_get_repository_safely_handles_http_error(status_code):
+    
+    session = Mock()
+
+    
+    fake_response = Mock()
+    fake_response.status_code = status_code
+
+    
+    session.get.return_value = fake_response
+
+    # 오류 처리 함수 실행
+    result = get_repository_safely(
+        session, "octocat/Hello-World"
+    )
+
+    # 반환 결과 검증
+    assert result["success"] is False
+    assert result["response"].status_code == status_code
+    assert result["error"] == "http_error"

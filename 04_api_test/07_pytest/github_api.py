@@ -14,7 +14,15 @@ def get_repository_safely(session, repository):
     try:
         response = get_repository(session, repository)
 
-        # 요청에 성공하면 성공 결과 반환
+        # 상태 코드가 200~299인지 확인
+        if not 200 <= response.status_code < 300:
+            return {
+                "success": False,
+                "response": response,
+                "error": "http_error",
+            }
+
+        # 정상적인 HTTP 상태 코드라면 성공 반환
         return {
             "success": True,
             "response": response,
