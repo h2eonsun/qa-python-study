@@ -98,3 +98,26 @@ def test_get_repository_safely_handles_http_error(status_code):
     assert result["success"] is False
     assert result["response"].status_code == status_code
     assert result["error"] == "http_error"
+
+
+    
+@pytest.mark.parametrize("status_code", [200, 201, 204])
+def test_get_repository_safely_handles_success(status_code):
+    session = Mock()
+
+    fake_response = Mock()
+
+    fake_response.status_code = status_code
+
+    session.get.return_value = fake_response
+
+    result = get_repository_safely(
+        session, "octocat/Hello-World"
+    )
+
+    # 반환 결과 검증
+    assert result["success"] is True
+    assert result["response"] is fake_response
+    assert result["error"] is None
+
+    session.get.assert_called_once()
