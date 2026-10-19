@@ -44,3 +44,25 @@ def get_repository_safely(session, repository):
             "response": None,
             "error": "connection_error",
         }
+
+
+
+def validate_repository_data(data):
+    if not isinstance(data, dict):
+        raise ValueError("Response data must be a dictionary")
+
+    if not isinstance(data.get("name"), str) or not data["name"].strip():
+        raise ValueError("Repository name must be a non-empty string")
+
+    if not isinstance(data.get("private"), bool):
+        raise ValueError("Repository private must be a boolean")
+
+    owner = data.get("owner")
+
+    if not isinstance(owner, dict):
+        raise ValueError("Repository owner must be a dictionary")
+
+    if not isinstance(owner.get("login"), str) or not owner["login"].strip():
+        raise ValueError("Owner login must be a non-empty string")
+
+    return True
