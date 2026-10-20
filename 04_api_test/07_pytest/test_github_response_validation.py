@@ -21,7 +21,37 @@ def test_validate_repository_data_success():
 @pytest.mark.parametrize(
     "invalid_data",
     [
-        
+        # name 필드 누락
+        {
+            "private": False,
+            "owner": {"login": "octocat"},
+        },
+
+        # private 필드 누락
+        {
+            "name": "Hello-World",
+            "owner": {"login": "octocat"},
+        },
+
+        # owner 필드 누락
+        {
+            "name": "Hello-World",
+            "private": False,
+        },
+
+        # owner 안에 login 필드 누락
+        {
+            "name": "Hello-World",
+            "private": False,
+            "owner": {},
+        },
+
+        # owner가 문자열인 경우
+        {
+            "name": "Hello-World",
+            "private": False,
+            "owner": "octocat",
+        },
         # name이 공백으로만 구성된 경우
         {
             "name": "   ",
