@@ -7,6 +7,20 @@ from github_api import (
     get_repository_data,
 )
 
+@pytest.fixture
+def make_mock_session():
+    def _make_mock_session(status_code=200, json_data=None):
+        session = Mock()
+        response = Mock()
+
+        response.status_code = status_code
+        response.json.return_value = json_data
+        session.get.return_value = response
+
+        return session, response
+
+    return _make_mock_session
+
 VALID_DATA = {
     "name": "Hello-World",
     "private": False,
@@ -152,25 +166,19 @@ def test_validate_repository_data_error_message(
 
 
 
-def test_get_repository_data_success():
-    session = Mock()
-    response = Mock()
-
-    response.status_code = 200
-    response.json.return_value = {
+def test_get_repository_data_success(make_mock_session):
+    valid_data = {
         "name": "Hello-World",
         "private": False,
-        "owner": {
-            "login": "octocat"
-        }
+        "owner": {"login": "octocat"},
     }
 
-    session.get.return_value = response
-
-    result = get_repository_data(
-        session,
-        "octocat/Hello-World"
+    session, _ = make_mock_session(
+        status_code=200,
+        json_data=valid_data,
     )
+
+    result = get_repository_data(session, "octocat/Hello-World")
 
     assert result["name"] == "Hello-World"
     assert result["private"] is False
@@ -178,40 +186,27 @@ def test_get_repository_data_success():
     session.get.assert_called_once()
 
 
-def test_get_repository_data_http_error():
-    session = Mock()
-    response = Mock()
-
-    response.status_code = 404
-    session.get.return_value = response
+def test_get_repository_data_http_error(make_mock_session):
+    session, _ = make_mock_session(status_code=404)
 
     with pytest.raises(requests.HTTPError, match="404"):
-        get_repository_data(
-            session,
-            "octocat/Hello-World"
-        )
+        get_repository_data(session, "octocat/Hello-World")
 
 
-def test_get_repository_data_invalid_json_data():
-    session = Mock()
-    response = Mock()
-
-    response.status_code = 200
-    response.json.return_value = {
+def test_get_repository_data_invalid_json_data(make_mock_session):
+    invalid_data = {
         "name": "",
         "private": False,
-        "owner": {
-            "login": "octocat"
-        }
+        "owner": {"login": "octocat"},
     }
 
-    session.get.return_value = response
+    session, _ = make_mock_session(
+        status_code=200,
+        json_data=invalid_data,
+    )
 
     with pytest.raises(
         ValueError,
-        match="Repository name must be a non-empty string"
+        match="Repository name must be a non-empty string",
     ):
-        get_repository_data(
-            session,
-            "octocat/Hello-World"
-        )
+        get_repository_data(session, "octocat/Hello-World")
