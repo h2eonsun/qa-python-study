@@ -66,3 +66,18 @@ def validate_repository_data(data):
         raise ValueError("Owner login must be a non-empty string")
 
     return True
+
+
+
+def get_repository_data(session, repository):
+    response = get_repository(session, repository)
+
+    if not 200 <= response.status_code < 300:
+        raise requests.HTTPError(
+            f"Repository API request failed: {response.status_code}"
+        )
+
+    data = response.json()
+    validate_repository_data(data)
+
+    return data

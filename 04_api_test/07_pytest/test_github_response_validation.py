@@ -1,7 +1,11 @@
 import pytest
+import requests
+from unittest.mock import Mock
 
-from github_api import validate_repository_data
-
+from github_api import (
+    validate_repository_data,
+    get_repository_data,
+)
 
 VALID_DATA = {
     "name": "Hello-World",
@@ -145,3 +149,69 @@ def test_validate_repository_data_error_message(
 ):
     with pytest.raises(ValueError, match=expected_message):
         validate_repository_data(invalid_data)
+
+
+
+def test_get_repository_data_success():
+    session = Mock()
+    response = Mock()
+
+    response.status_code = 200
+    response.json.return_value = {
+        "name": "Hello-World",
+        "private": False,
+        "owner": {
+            "login": "octocat"
+        }
+    }
+
+    session.get.return_value = response
+
+    result = get_repository_data(
+        session,
+        "octocat/Hello-World"
+    )
+
+    assert result["name"] == "Hello-World"
+    assert result["private"] is False
+    assert result["owner"]["login"] == "octocat"
+    session.get.assert_called_once()
+
+
+def test_get_repository_data_http_error():
+    session = Mock()
+    response = Mock()
+
+    response.status_code = 404
+    session.get.return_value = response
+
+    with pytest.raises(requests.HTTPError, match="404"):
+        get_repository_data(
+            session,
+            "octocat/Hello-World"
+        )
+
+
+def test_get_repository_data_invalid_json_data():
+    session = Mock()
+    response = Mock()
+
+    response.status_code = 200
+    response.json.return_value = {
+        "name": "",
+        "private": False,
+        "owner": {
+            "login": "octocat"
+        }
+    }
+
+    session.get.return_value = response
+
+    with pytest.raises(
+        ValueError,
+        match="Repository name must be a non-empty string"
+    ):
+        get_repository_data(
+            session,
+            "octocat/Hello-World"
+        )
