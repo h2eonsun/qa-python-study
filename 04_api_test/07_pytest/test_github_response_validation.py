@@ -109,3 +109,39 @@ def test_validate_repository_data_success():
 def test_validate_repository_data_invalid(invalid_data):
     with pytest.raises(ValueError):
         validate_repository_data(invalid_data)
+
+
+
+@pytest.mark.parametrize(
+    ("invalid_data", "expected_message"),
+    [
+        (
+            {
+                "private": False,
+                "owner": {"login": "octocat"},
+            },
+            "Repository name must be a non-empty string",
+        ),
+        (
+            {
+                "name": "Hello-World",
+                "owner": {"login": "octocat"},
+            },
+            "Repository private must be a boolean",
+        ),
+        (
+            {
+                "name": "Hello-World",
+                "private": False,
+                "owner": {},
+            },
+            "Owner login must be a non-empty string",
+        ),
+    ],
+)
+def test_validate_repository_data_error_message(
+    invalid_data,
+    expected_message,
+):
+    with pytest.raises(ValueError, match=expected_message):
+        validate_repository_data(invalid_data)
