@@ -166,7 +166,8 @@ def test_validate_repository_data_error_message(
 
 
 
-def test_get_repository_data_success(make_mock_session):
+@pytest.mark.parametrize("status_code", [200, 201])
+def test_get_repository_data_success(make_mock_session, status_code):
     valid_data = {
         "name": "Hello-World",
         "private": False,
@@ -174,7 +175,7 @@ def test_get_repository_data_success(make_mock_session):
     }
 
     session, _ = make_mock_session(
-        status_code=200,
+        status_code=status_code,
         json_data=valid_data,
     )
 
@@ -186,10 +187,11 @@ def test_get_repository_data_success(make_mock_session):
     session.get.assert_called_once()
 
 
-def test_get_repository_data_http_error(make_mock_session):
-    session, _ = make_mock_session(status_code=404)
+@pytest.mark.parametrize("status_code", [400, 404])
+def test_get_repository_data_http_error(make_mock_session, status_code):
+    session, _ = make_mock_session(status_code=status_code)
 
-    with pytest.raises(requests.HTTPError, match="404"):
+    with pytest.raises(requests.HTTPError, match=str(status_code)):
         get_repository_data(session, "octocat/Hello-World")
 
 
