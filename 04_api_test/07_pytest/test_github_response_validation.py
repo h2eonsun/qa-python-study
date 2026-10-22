@@ -212,3 +212,19 @@ def test_get_repository_data_invalid_json_data(make_mock_session):
         match="Repository name must be a non-empty string",
     ):
         get_repository_data(session, "octocat/Hello-World")
+
+
+def test_get_repository_data_no_content_raises_json_decode_error(
+    make_mock_session,
+):
+    session, response = make_mock_session(status_code=204)
+
+    response.json.side_effect = requests.exceptions.JSONDecodeError(
+        "Expecting value", "", 0
+    )
+
+    with pytest.raises(
+        requests.exceptions.JSONDecodeError,
+        match="Expecting value",
+    ):
+        get_repository_data(session, "octocat/Hello-World")
