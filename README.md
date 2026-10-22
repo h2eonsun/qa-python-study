@@ -68,10 +68,12 @@ python -m pytest --run-integration -v
 | [`settings.py`](04_api_test/07_pytest/settings.py) | API 기본 URL과 타임아웃 설정 |
 | [`conftest.py`](04_api_test/07_pytest/conftest.py) | 공통 Fixture와 통합 테스트 실행 옵션 |
 | [`pytest.ini`](pytest.ini) | pytest 테스트 경로 및 마커 설정 |
+| [`test_github_api.py`](04_api_test/07_pytest/test_github_api.py) | GitHub API 요청 및 응답 테스트 |
+| [`test_github_repository.py`](04_api_test/07_pytest/test_github_repository.py) | 저장소 조회 관련 테스트 |
+| [`test_github_data_driven.py`](04_api_test/07_pytest/test_github_data_driven.py) | JSON 데이터 기반 테스트 |
 | [`test_github_mock.py`](04_api_test/07_pytest/test_github_mock.py) | Mock을 활용한 API 동작 테스트 |
 | [`test_github_exceptions.py`](04_api_test/07_pytest/test_github_exceptions.py) | HTTP 오류와 예외 처리 테스트 |
 | [`test_github_response_validation.py`](04_api_test/07_pytest/test_github_response_validation.py) | 응답 데이터 검증 테스트 |
-| [`test_github_data_driven.py`](04_api_test/07_pytest/test_github_data_driven.py) | JSON 데이터 기반 테스트 |
 | [`github_repository_cases.json`](04_api_test/07_pytest/data/github_repository_cases.json) | 데이터 기반 테스트 케이스 |
 
 ## 설정값
