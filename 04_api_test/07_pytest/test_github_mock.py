@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock
 from github_api import get_repository
 from settings import API_TIMEOUT_SECONDS, GITHUB_API_BASE_URL
 
@@ -100,3 +100,22 @@ def test_get_repository_response_data():
     assert data["name"] == "Hello-World"
     assert data["full_name"] == "octocat/Hello-World"
     assert data["private"] is False
+
+
+def test_get_repository_calls_api_with_url_and_timeout():
+    session = Mock()
+    expected_response = Mock()
+    session.get.return_value = expected_response
+
+    result = get_repository(session, "octocat/Hello-World")
+
+    expected_url = (
+        f"{GITHUB_API_BASE_URL}/repos/octocat/Hello-World"
+    )
+
+    session.get.assert_called_once_with(
+        expected_url,
+        timeout=API_TIMEOUT_SECONDS,
+    )
+
+    assert result is expected_response    
