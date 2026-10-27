@@ -109,6 +109,10 @@ def test_get_repository_response_data():
         "octocat/Hello-World",
         "psf/requests",
     ],
+     ids=[
+        "octocat-hello-world",
+        "psf-requests",
+    ],
 )
 def test_get_repository_calls_api_with_url_and_timeout(repository):
     session = Mock()
