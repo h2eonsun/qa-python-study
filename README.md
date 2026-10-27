@@ -26,6 +26,11 @@ Python과 pytest를 활용해 API 테스트와 응답 데이터 검증을 연습
 - JSON 테스트 데이터를 활용한 데이터 기반 테스트 구성
 - `integration` 마커와 실행 옵션으로 로컬 테스트와 외부 API 통합 테스트 구분
 
+### 환경 변수 설정 검증
+
+- 환경 변수 미설정 시 기본값이 적용되는지 검증
+- 환경 변수로 지정한 API 기본 URL과 타임아웃 값이 반영되는지 검증
+
 ## 실행 방법
 
 아래 명령은 저장소 최상위 폴더에서 Windows PowerShell 기준으로 실행합니다.
@@ -66,6 +71,7 @@ python -m pytest --run-integration -v
 |---|---|
 | [`github_api.py`](04_api_test/07_pytest/github_api.py) | API 요청 및 응답 처리·검증 로직 |
 | [`settings.py`](04_api_test/07_pytest/settings.py) | API 기본 URL과 타임아웃 설정 |
+| [`test_settings.py`](04_api_test/07_pytest/test_settings.py) | 환경 변수 및 기본 설정값 검증 테스트 |
 | [`conftest.py`](04_api_test/07_pytest/conftest.py) | 공통 Fixture와 통합 테스트 실행 옵션 |
 | [`pytest.ini`](pytest.ini) | pytest 테스트 경로 및 마커 설정 |
 | [`test_github_api.py`](04_api_test/07_pytest/test_github_api.py) | GitHub API 요청 및 응답 테스트 |
