@@ -193,3 +193,52 @@ def test_settings_rejects_invalid_timeout_values(
 
     finally:
         importlib.reload(settings)
+
+
+@pytest.mark.parametrize(
+    ("base_url", "expected_message"),
+    [
+        (
+            "",
+            "GITHUB_API_BASE_URL must not be empty",
+        ),
+        (
+            "   ",
+            "GITHUB_API_BASE_URL must not be empty",
+        ),
+        (
+            "example.com",
+            "GITHUB_API_BASE_URL must be a valid HTTP or HTTPS URL",
+        ),
+        (
+            "ftp://example.com",
+            "GITHUB_API_BASE_URL must be a valid HTTP or HTTPS URL",
+        ),
+        (
+            "https://",
+            "GITHUB_API_BASE_URL must be a valid HTTP or HTTPS URL",
+        ),
+    ],
+    ids=[
+        "empty-url",
+        "whitespace-only-url",
+        "missing-scheme",
+        "unsupported-scheme",
+        "missing-host",
+    ],
+)
+def test_settings_rejects_invalid_base_urls(
+    monkeypatch,
+    base_url,
+    expected_message,
+):
+    try:
+        with monkeypatch.context() as m:
+            m.setenv("GITHUB_API_BASE_URL", base_url)
+
+            with pytest.raises(ValueError, match=expected_message):
+                importlib.reload(settings)
+
+    finally:
+        importlib.reload(settings)
+
