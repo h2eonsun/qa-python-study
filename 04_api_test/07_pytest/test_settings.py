@@ -1,3 +1,4 @@
+import pytest
 import importlib
 from unittest.mock import Mock
 
@@ -69,3 +70,68 @@ def test_get_repository_uses_environment_settings(monkeypatch):
     finally:
         importlib.reload(settings)
         importlib.reload(github_api)
+
+
+# URL 끝의 슬래시 제거 테스트
+@pytest.mark.parametrize(
+    ("base_url", "expected_url"),
+    [
+        ("https://example.com", "https://example.com"),
+        ("https://example.com/", "https://example.com"),
+        ("https://example.com///", "https://example.com"),
+    ],
+    ids=[
+        "without-trailing-slash",
+        "one-trailing-slash",
+        "multiple-trailing-slashes",
+    ],
+)
+def test_settings_removes_trailing_slashes(
+    monkeypatch,
+    base_url,
+    expected_url,
+):
+    try:
+        with monkeypatch.context() as m:
+            m.setenv("GITHUB_API_BASE_URL", base_url)
+
+            reloaded_settings = importlib.reload(settings)
+
+            assert reloaded_settings.GITHUB_API_BASE_URL == expected_url
+
+    finally:
+        importlib.reload(settings)
+
+
+# 타임아웃 숫자형 변환 테스트
+@pytest.mark.parametrize(
+    ("timeout_value", "expected_timeout"),
+    [
+        ("5", 5.0),
+        ("10", 10.0),
+        ("2.5", 2.5),
+    ],
+    ids=[
+        "integer-string",
+        "ten-seconds",
+        "decimal-string",
+    ],
+)
+def test_settings_converts_timeout_to_float(
+    monkeypatch,
+    timeout_value,
+    expected_timeout,
+):
+    try:
+        with monkeypatch.context() as m:
+            m.setenv("API_TIMEOUT_SECONDS", timeout_value)
+
+            reloaded_settings = importlib.reload(settings)
+
+            assert (
+                reloaded_settings.API_TIMEOUT_SECONDS
+                == expected_timeout
+            )
+
+    finally:
+        importlib.reload(settings)
