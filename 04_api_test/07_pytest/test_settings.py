@@ -138,27 +138,57 @@ def test_settings_converts_timeout_to_float(
 
 
 @pytest.mark.parametrize(
-    "timeout_value",
+    ("timeout_value", "expected_message"),
     [
-        "abc",
-        "",
-        "five",
+        (
+            "abc",
+            "API_TIMEOUT_SECONDS must be a valid number",
+        ),
+        (
+            "",
+            "API_TIMEOUT_SECONDS must be a valid number",
+        ),
+        (
+            "five",
+            "API_TIMEOUT_SECONDS must be a valid number",
+        ),
+        (
+            "0",
+            "API_TIMEOUT_SECONDS must be a finite number greater than 0",
+        ),
+        (
+            "-1",
+            "API_TIMEOUT_SECONDS must be a finite number greater than 0",
+        ),
+        (
+            "nan",
+            "API_TIMEOUT_SECONDS must be a finite number greater than 0",
+        ),
+        (
+            "inf",
+            "API_TIMEOUT_SECONDS must be a finite number greater than 0",
+        ),
     ],
     ids=[
         "alphabetic-value",
         "empty-value",
         "word-value",
+        "zero-value",
+        "negative-value",
+        "not-a-number",
+        "infinite-value",
     ],
 )
-def test_settings_rejects_non_numeric_timeout(
+def test_settings_rejects_invalid_timeout_values(
     monkeypatch,
     timeout_value,
+    expected_message,
 ):
     try:
         with monkeypatch.context() as m:
             m.setenv("API_TIMEOUT_SECONDS", timeout_value)
 
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match=expected_message):
                 importlib.reload(settings)
 
     finally:
