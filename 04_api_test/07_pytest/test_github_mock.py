@@ -129,3 +129,10 @@ def test_get_repository_calls_api_with_url_and_timeout(repository):
     )
 
     assert result is expected_response
+
+
+def test_github_session_sets_accept_header(github_session):
+    assert (
+        github_session.headers["Accept"]
+        == "application/vnd.github+json"
+    )
