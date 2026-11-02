@@ -135,3 +135,31 @@ def test_settings_converts_timeout_to_float(
 
     finally:
         importlib.reload(settings)
+
+
+@pytest.mark.parametrize(
+    "timeout_value",
+    [
+        "abc",
+        "",
+        "five",
+    ],
+    ids=[
+        "alphabetic-value",
+        "empty-value",
+        "word-value",
+    ],
+)
+def test_settings_rejects_non_numeric_timeout(
+    monkeypatch,
+    timeout_value,
+):
+    try:
+        with monkeypatch.context() as m:
+            m.setenv("API_TIMEOUT_SECONDS", timeout_value)
+
+            with pytest.raises(ValueError):
+                importlib.reload(settings)
+
+    finally:
+        importlib.reload(settings)
