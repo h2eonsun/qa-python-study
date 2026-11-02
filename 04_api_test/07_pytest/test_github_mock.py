@@ -1,4 +1,5 @@
 import pytest
+import requests
 from unittest.mock import MagicMock, Mock
 from github_api import get_repository
 from settings import API_TIMEOUT_SECONDS, GITHUB_API_BASE_URL
@@ -134,5 +135,21 @@ def test_get_repository_calls_api_with_url_and_timeout(repository):
 def test_github_session_sets_accept_header(github_session):
     assert (
         github_session.headers["Accept"]
+        == "application/vnd.github+json"
+    )
+
+
+def test_github_session_includes_accept_header_in_request(
+    github_session,
+):
+    request = requests.Request(
+        method="GET",
+        url="https://api.github.com/repos/octocat/Hello-World",
+    )
+
+    prepared_request = github_session.prepare_request(request)
+
+    assert (
+        prepared_request.headers["Accept"]
         == "application/vnd.github+json"
     )
