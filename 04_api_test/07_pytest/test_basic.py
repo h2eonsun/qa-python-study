@@ -1,3 +1,5 @@
+# pytest 기본 연습
+
 def test_true():
     assert True
 
