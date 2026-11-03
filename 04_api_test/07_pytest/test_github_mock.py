@@ -153,3 +153,27 @@ def test_github_session_includes_accept_header_in_request(
         prepared_request.headers["Accept"]
         == "application/vnd.github+json"
     )
+
+
+def test_github_session_merges_default_and_request_headers(
+    github_session,
+):
+    request = requests.Request(
+        method="GET",
+        url="https://api.github.com/repos/octocat/Hello-World",
+        headers={
+            "X-Test-Source": "qa-python-study"
+        },
+    )
+
+    prepared_request = github_session.prepare_request(request)
+
+    assert (
+        prepared_request.headers["Accept"]
+        == "application/vnd.github+json"
+    )
+
+    assert (
+        prepared_request.headers["X-Test-Source"]
+        == "qa-python-study"
+    )
